@@ -21,6 +21,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'org.projectlombok:lombok:1.18.30' // 最新版を使用
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    
+    // IntelliJ や他の IDE でのアノテーション処理をサポートするため
+    testImplementation 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 tasks.named('test') {
