@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -15,6 +17,16 @@ import lombok.*;
 
 @Entity
 @Table(name = "people")
+@NamedQueries({
+    @NamedQuery(
+        name = "findWithName",
+        query = "from Person where name like :fname"
+    ),
+    @NamedQuery(
+        name = "findByAge",
+        query = "from Person where age >= :min and age <= :max"
+    )
+})
 @Getter // 自動で Getter を生成
 @Setter // 自動で Setter を生成
 @NoArgsConstructor // 引数なしコンストラクタを生成

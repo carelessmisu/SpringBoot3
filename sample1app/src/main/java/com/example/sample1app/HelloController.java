@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ public class HelloController {
 
     @Autowired
     PersonRepository repository;
+
+    @Autowired
+    PersonDAOPersonImpl dao;
 
     @PostConstruct
     public void init() {
@@ -47,6 +51,91 @@ public class HelloController {
         repository.saveAndFlush(p3);
     }
 
+    // find
+    @RequestMapping(value = "/find", method = RequestMethod.GET)
+    public ModelAndView find(ModelAndView mav) {
+        mav.setViewName("find");
+        mav.addObject("msg", "Personのサンプルです。");
+        Iterable<Person> list = dao.getAll();
+        mav.addObject("data", list);
+        return mav;
+    }
+
+    // find by id
+    // @RequestMapping(value = "/find", method = RequestMethod.POST)
+    // public ModelAndView search(HttpServletRequest request,
+    // ModelAndView mav) {
+    // mav.setViewName("find");
+    // String param = request.getParameter("find_str");
+    // if (param == "") {
+    // mav = new ModelAndView("redirect:/find");
+    // } else {
+    // mav.addObject("title", "Find result");
+    // mav.addObject("msg", "「" + param + "」の検索結果");
+    // mav.addObject("value", param);
+    // Person data = dao.findById(Integer.parseInt(param)); // ☆
+    // Person[] list = new Person[] { data };
+    // mav.addObject("data", list);
+    // }
+    // return mav;
+    // }
+
+    // find by name
+    // @RequestMapping(value = "/find", method = RequestMethod.POST)
+    // public ModelAndView search(HttpServletRequest request,
+    // ModelAndView mav) {
+    // mav.setViewName("find");
+    // String param = request.getParameter("find_str");
+    // if (param == "") {
+    // mav = new ModelAndView("redirect:/find");
+    // } else {
+    // mav.addObject("title", "Find result");
+    // mav.addObject("msg", "「" + param + "」の検索結果");
+    // mav.addObject("value", param);
+    // List<Person> list = dao.findByName(param); // ☆
+    // mav.addObject("data", list);
+    // }
+    // return mav;
+    // }
+
+    // find by id , name, mail
+    // @RequestMapping(value = "/find", method = RequestMethod.POST)
+    // public ModelAndView search(HttpServletRequest request,
+    // ModelAndView mav) {
+    // mav.setViewName("find");
+    // String param = request.getParameter("find_str");
+    // if (param == "") {
+    // mav = new ModelAndView("redirect:/find");
+    // } else {
+    // mav.addObject("title", "Find result");
+    // mav.addObject("msg", "「" + param + "」の検索結果");
+    // mav.addObject("value", param);
+    // List<Person> list = dao.find(param);
+    // mav.addObject("data", list);
+    // }
+    // return mav;
+    // }
+
+    // find by age
+    @RequestMapping(value = "/find", method = RequestMethod.POST)
+    public ModelAndView search(HttpServletRequest request,
+            ModelAndView mav) {
+        mav.setViewName("find");
+        String param = request.getParameter("find_str");
+        if (param == "") {
+            mav = new ModelAndView("redirect:/find");
+        } else {
+            String[] params = param.split(",");
+            mav.addObject("title", "Find result");
+            mav.addObject("msg", "「" + param + "」の検索結果");
+            mav.addObject("value", param);
+            // List<Person> list = dao.findByAge(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+            List<Person> list = repository.findByAge(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+            mav.addObject("data", list);
+        }
+        return mav;
+    }
+
     // create
     @RequestMapping("/")
     public ModelAndView index(
@@ -55,7 +144,8 @@ public class HelloController {
         mav.setViewName("index");
         mav.addObject("title", "Hello page");
         mav.addObject("msg", "this is JPA sample data.");
-        List<Person> list = repository.findAll();
+        // List<Person> list = repository.findAll();
+        List<Person> list = repository.findAllOrderByName();
         mav.addObject("data", list);
         return mav;
     }
