@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PostService } from './services/post.service';
@@ -9,7 +8,7 @@ import { Post } from './models/post';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   template: `
     <div class="container">
       <header>
