@@ -1,0 +1,17 @@
+<div class="post-container">
+    <div *ngIf="loading">
+      <p>Loading post...</p>
+    </div>
+    
+    <div *ngIf="error">
+      <p>Error loading post. Please try again later.</p>
+    </div>
+    
+    <div *ngIf="post && !loading && !error">
+      <h2>{{ post.title }}</h2>
+      <div class="post-content">
+        {{ post.body }}
+      </div>
+      <!-- 必要に応じて他のフィールドを表示 -->
+    </div>
+  </div>
