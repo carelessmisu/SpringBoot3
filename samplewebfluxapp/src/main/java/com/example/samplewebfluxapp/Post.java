@@ -6,40 +6,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "post")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column
-	public int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    private int id;
 
-	@Column
-	public int userId;
+    @Column
+    private int userId;
 
-	@Column(nullable = false)
-	public String title;
+    @Column(nullable = false)
+    private String title;
 
-	@Column(nullable = false)
-	public String body;
-
-	public Post() {
-		super();
-	}
-
-	public Post(int id, int userId, String title, String body) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.title = title;
-		this.body = body;
-	}
-
-	public String toString() {
-		return "{id:" + id + ", userId:" + userId
-				+ ", title:\"" + title + "\", body:\""
-				+ body + "\"}";
-	}
+    @Column(nullable = false)
+    private String body;
 }
