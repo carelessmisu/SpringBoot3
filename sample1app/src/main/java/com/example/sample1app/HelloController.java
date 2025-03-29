@@ -24,6 +24,15 @@ import com.example.sample1app.repositories.PersonRepository;
 public class HelloController {
 
     @Autowired
+    Post post;
+
+    @Autowired
+    SampleComponent component;
+
+    @Autowired
+    SampleService service;
+
+    @Autowired
     PersonRepository repository;
 
     @Autowired
@@ -61,61 +70,6 @@ public class HelloController {
         return mav;
     }
 
-    // find by id
-    // @RequestMapping(value = "/find", method = RequestMethod.POST)
-    // public ModelAndView search(HttpServletRequest request,
-    // ModelAndView mav) {
-    // mav.setViewName("find");
-    // String param = request.getParameter("find_str");
-    // if (param == "") {
-    // mav = new ModelAndView("redirect:/find");
-    // } else {
-    // mav.addObject("title", "Find result");
-    // mav.addObject("msg", "「" + param + "」の検索結果");
-    // mav.addObject("value", param);
-    // Person data = dao.findById(Integer.parseInt(param)); // ☆
-    // Person[] list = new Person[] { data };
-    // mav.addObject("data", list);
-    // }
-    // return mav;
-    // }
-
-    // find by name
-    // @RequestMapping(value = "/find", method = RequestMethod.POST)
-    // public ModelAndView search(HttpServletRequest request,
-    // ModelAndView mav) {
-    // mav.setViewName("find");
-    // String param = request.getParameter("find_str");
-    // if (param == "") {
-    // mav = new ModelAndView("redirect:/find");
-    // } else {
-    // mav.addObject("title", "Find result");
-    // mav.addObject("msg", "「" + param + "」の検索結果");
-    // mav.addObject("value", param);
-    // List<Person> list = dao.findByName(param); // ☆
-    // mav.addObject("data", list);
-    // }
-    // return mav;
-    // }
-
-    // find by id , name, mail
-    // @RequestMapping(value = "/find", method = RequestMethod.POST)
-    // public ModelAndView search(HttpServletRequest request,
-    // ModelAndView mav) {
-    // mav.setViewName("find");
-    // String param = request.getParameter("find_str");
-    // if (param == "") {
-    // mav = new ModelAndView("redirect:/find");
-    // } else {
-    // mav.addObject("title", "Find result");
-    // mav.addObject("msg", "「" + param + "」の検索結果");
-    // mav.addObject("value", param);
-    // List<Person> list = dao.find(param);
-    // mav.addObject("data", list);
-    // }
-    // return mav;
-    // }
-
     // find by age
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     public ModelAndView search(HttpServletRequest request,
@@ -129,7 +83,8 @@ public class HelloController {
             mav.addObject("title", "Find result");
             mav.addObject("msg", "「" + param + "」の検索結果");
             mav.addObject("value", param);
-            // List<Person> list = dao.findByAge(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+            // List<Person> list = dao.findByAge(Integer.parseInt(params[0]),
+            // Integer.parseInt(params[1]));
             List<Person> list = repository.findByAge(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
             mav.addObject("data", list);
         }
@@ -209,5 +164,30 @@ public class HelloController {
             ModelAndView mav) {
         repository.deleteById(id);
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping("/bean")
+    public ModelAndView bean(ModelAndView mav) {
+        mav.setViewName("bean");
+        mav.addObject("title", "Bean sample");
+        // mav.addObject("msg", post);
+        mav.addObject("msg", component.message());
+        // mav.addObject("data", service.getAllPosts());
+        mav.addObject("data", service.getLocalPost());
+        return mav;
+    }
+
+    @RequestMapping(value = "/bean", method = RequestMethod.POST)
+    public ModelAndView bean(
+            HttpServletRequest request,
+            ModelAndView mav) {
+        String param = request.getParameter("find_str");
+        mav.setViewName("bean");
+        mav.addObject("title", "Bean sample");
+        mav.addObject("msg", "get id = " + param);
+        // Post post = service.getPost(Integer.parseInt(param));
+        Post post = service.getAndSavePost(Integer.parseInt(param));
+        mav.addObject("data", new Post[] { post });
+        return mav;
     }
 }
