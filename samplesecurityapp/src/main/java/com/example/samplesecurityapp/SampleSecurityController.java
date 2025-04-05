@@ -3,6 +3,7 @@ package com.example.samplesecurityapp;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -14,6 +15,20 @@ public class SampleSecurityController {
         mav.setViewName("index");
         mav.addObject("title", "Index page");
         mav.addObject("msg", "This is top page.");
+        return mav;
+    }
+
+    @RequestMapping("/login")
+    @PreAuthorize("permitAll")
+    public ModelAndView login(ModelAndView mav,
+            @RequestParam(value = "error", required = false) String error) {
+        mav.setViewName("login");
+        System.out.println(error);
+        if (error != null) {
+            mav.addObject("msg", "ログインできませんでした。");
+        } else {
+            mav.addObject("msg", "ユーザー名とパスワードを入力：");
+        }
         return mav;
     }
 
